@@ -14,7 +14,7 @@ git clone https://github.com/EmrNITK/Ping-Pong
 ```
 * Navigate to the project directory.
 ```bash
-cd Ping-Pong
+cd AirHockey
 ```
 * Install the required dependencies using pip.
 ```bash
