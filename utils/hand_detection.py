@@ -1,7 +1,9 @@
 import cv2
 import numpy as np
+
 def empty(a):
-        pass
+    pass
+
 class HandDetection():
     def __init__(self):
         pass
@@ -16,7 +18,7 @@ class HandDetection():
         cv2.createTrackbar('ValMin', 'Trackbars', 0, 255, empty)
         cv2.createTrackbar('ValMax', 'Trackbars', 113, 255, empty)
     
-    def create_mask(self,img):
+    def create_mask(self, img):
         imgHSV = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         hue_min = cv2.getTrackbarPos('HueMin', 'Trackbars')
         hue_max = cv2.getTrackbarPos('HueMax', 'Trackbars')
@@ -29,61 +31,67 @@ class HandDetection():
         mask = cv2.inRange(imgHSV, lower, upper)
         return mask
     
-    def threshold(self,mask):
-        _,thresh_img = cv2.threshold(mask,127,255,cv2.THRESH_OTSU)
+    def threshold(self, mask):
+        _, thresh_img = cv2.threshold(mask, 127, 255, cv2.THRESH_OTSU)
         return thresh_img
     
-    def find_contours(self,thresh_img):
-        contours,_ = cv2.findContours(thresh_img,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+    def find_contours(self, thresh_img):
+        contours, _ = cv2.findContours(thresh_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         return contours
-        
-    def max_contour(self,contours):
-        if len(contours) == 0:
-            return []
-        max_cntr = max(contours,key=lambda x: cv2.contourArea(x))
-        epsilon = 0.005*cv2.arcLength(max_cntr,True)  
-        max_cntr = cv2.approxPolyDP(max_cntr,epsilon,True)
-        return max_cntr
-    def clean_image(self,mask):
-        img_eroded = cv2.erode(mask,(3,3), iterations=1)  
-        img_dilated = cv2.dilate(img_eroded,(3,3),iterations = 1)
-        return img_dilated
-    def centroid(self,contour):
-        if len(contour) == 0:
-            return (-1,-1)
-        M=cv2.moments(contour)
-        try:
-            x = int(M['m10']/M['m00']) 
-            y = int(M['m01']/M['m00'])
-        except ZeroDivisionError:
-            return (-1,-1) 
-        return (x,y)
-
-######################  DRIVER CODE   #########################
-# vid = cv2.VideoCapture(0);
-# HandDetection = HandDetection()
-# HandDetection.create_trackbars()
-# while(1):
-#     _,frame = vid.read()
-#     frame = cv2.flip(frame,1)
-#     fullScreenFrame=frame
-#     frame = frame[:290, 290:] 
-#     frame = cv2.GaussianBlur(frame,(3,3),0)
-
-#     mask = HandDetection.create_mask(frame)
-#     threshImg = HandDetection.threshold(mask)
-#     mask_cleaned = HandDetection.clean_image(threshImg)
-#     contours = HandDetection.find_contours(mask_cleaned)
-#     frame = cv2.drawContours(frame,contours,-1,(255,0,0),2) 
-#     max_cntr = HandDetection.max_contour(contours) 
-#     (centroid_x,centroid_y) = HandDetection.centroid(max_cntr) 
-#     print(centroid_x,centroid_y)
-#     cv2.imshow('video',frame)
-#     cv2.imshow("mask",mask)
-#     key = cv2.waitKey(10)
     
-#     if key == ord('q'):
-#         break
-# vid.release()
+    def two_largest_contours(self, contours):
+        if len(contours) < 2:
+            return contours  # Return all contours if fewer than 2 exist
+        sorted_contours = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)[:2]
+        approx_contours = []
+        for cnt in sorted_contours:
+            epsilon = 0.005 * cv2.arcLength(cnt, True)
+            approx = cv2.approxPolyDP(cnt, epsilon, True)
+            approx_contours.append(approx)
+        return approx_contours
 
+    def clean_image(self, mask):
+        img_eroded = cv2.erode(mask, (3, 3), iterations=1)
+        img_dilated = cv2.dilate(img_eroded, (3, 3), iterations=1)
+        return img_dilated
+
+    def centroid(self, contour):
+        if len(contour) == 0:
+            return (-1, -1)
+        M = cv2.moments(contour)
+        try:
+            x = int(M['m10'] / M['m00'])
+            y = int(M['m01'] / M['m00'])
+        except ZeroDivisionError:
+            return (-1, -1)
+        return (x, y)
+
+################# DRIVER CODE ###################
+
+# hd = HandDetection()
+# hd.create_trackbars()
+
+# cap = cv2.VideoCapture(0)
+
+# while True:
+#     ret, frame = cap.read()
+#     if not ret:
+#         break
+
+#     mask = hd.create_mask(frame)
+#     clean_mask = hd.clean_image(mask)
+#     thresh_img = hd.threshold(clean_mask)
+#     contours = hd.find_contours(thresh_img)
+#     largest_contours = hd.two_largest_contours(contours)
+
+#     for contour in largest_contours:
+#         cx, cy = hd.centroid(contour)
+#         cv2.drawContours(frame, [contour], -1, (0, 255, 0), 2)
+#         cv2.circle(frame, (cx, cy), 5, (255, 0, 0), -1)
+
+#     cv2.imshow("Frame", frame)
+#     if cv2.waitKey(1) & 0xFF == ord('q'):
+#         break
+
+# cap.release()
 # cv2.destroyAllWindows()
