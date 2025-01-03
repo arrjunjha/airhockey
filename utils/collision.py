@@ -1,9 +1,9 @@
-from utils.constants import WIDTH, HEIGHT
+from utils.constants import HEIGHT, LEFT_OFFSET, RIGHT_OFFSET
 
 
-def handle_collision(ball, left_paddle, right_paddle,frame):
+def handle_collision(ball, left_paddle, right_paddle, frame):
     # Collision with side edges
-    if ball.x - ball.radius <= 0 or ball.x + ball.radius >= WIDTH:
+    if ball.x - ball.radius < LEFT_OFFSET or ball.x + ball.radius > RIGHT_OFFSET:
         ball.reset()
 
     # Collision with top edge
@@ -20,15 +20,16 @@ def handle_collision(ball, left_paddle, right_paddle,frame):
         and ball.y + ball.radius <= right_paddle.y + right_paddle.height // 2
     ):
         ball.x_vel = -ball.x_vel
-        
+
         ball.increase_speed()
 
+    # Collision with left slider
     if ball.x - ball.radius <= left_paddle.x + left_paddle.width // 2 and (
         ball.y + ball.radius >= left_paddle.y - left_paddle.height // 2
         and ball.y + ball.radius <= left_paddle.y + left_paddle.height // 2
     ):
         ball.x_vel = -ball.x_vel
-       
+
         ball.increase_speed()
 
     ball.move(frame)
