@@ -14,9 +14,9 @@ class HandDetection():
         cv2.createTrackbar('HueMin', 'Trackbars', 0, 179, empty)
         cv2.createTrackbar('HueMax', 'Trackbars', 179, 179, empty)
         cv2.createTrackbar('SatMin', 'Trackbars', 0, 255, empty)
-        cv2.createTrackbar('SatMax', 'Trackbars', 206, 255, empty)
+        cv2.createTrackbar('SatMax', 'Trackbars', 255, 255, empty)
         cv2.createTrackbar('ValMin', 'Trackbars', 0, 255, empty)
-        cv2.createTrackbar('ValMax', 'Trackbars', 113, 255, empty)
+        cv2.createTrackbar('ValMax', 'Trackbars', 60, 255, empty)
     
     def create_mask(self, img):
         imgHSV = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -65,6 +65,21 @@ class HandDetection():
         except ZeroDivisionError:
             return (-1, -1)
         return (x, y)
+    
+    def get_centroid(self,frame):
+        mask = self.create_mask(frame)
+        clean_mask = self.clean_image(mask)
+        thresh_img = self.threshold(clean_mask)
+        contours = self.find_contours(thresh_img)
+        largest_contours = self.two_largest_contours(contours)
+        centroids = []
+        for contour in largest_contours:
+            cx, cy = self.centroid(contour)
+            centroids.append((cx, cy))
+            cv2.drawContours(frame, [contour], -1, (0, 255, 0), 2)
+            cv2.circle(frame, (cx, cy), 5, (0, 0, 255), -1)
+        return centroids
+        
 
 ################# DRIVER CODE ###################
 
