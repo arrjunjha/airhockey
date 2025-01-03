@@ -1,4 +1,5 @@
 import cv2
+import random
 
 from utils.constants import SPEED_INCREMENT,BALL_RADIUS,BALL_VEL,BALL_COLOR
 
@@ -29,5 +30,12 @@ class Ball:
     def reset(self):
         self.x = self.original_x
         self.y = self.original_y
-        self.x_vel = self.vel
-        self.y_vel = -1*self.vel
+
+        # Randmoize direction at every reset
+        choice = random.random()
+        x_dir = 1 if choice < 0.5 else -1
+        choice = random.random()
+        y_dir = 1 if choice < 0.5 else -1
+
+        self.x_vel = x_dir * self.vel 
+        self.y_vel = y_dir * self.vel 
