@@ -1,12 +1,12 @@
 import cv2
-from utils.constants import HEIGHT, WIDTH
+from utils.constants import HEIGHT,PADDLE_HEIGHT,PADDLE_WIDTH
 
 class Paddle:
-    def __init__(self, x, y, width, height, color):
+    def __init__(self, x, y,color):
         self.x = x
         self.y = y
-        self.width = width
-        self.height = height
+        self.width = PADDLE_WIDTH
+        self.height = PADDLE_HEIGHT
         self.color = color
 
     def draw(self, frame):
@@ -18,16 +18,17 @@ class Paddle:
             -1,
         )
 
-    def move(self, x, y):
+    def move(self, x, y,frame):
         self.x = x
         self.y = y
 
-    # Ensure the paddle stays within the frame boundaries
-        # if self.x - self.width//2 < 0:
-        #     self.x = self.width//2
-        # if self.x + self.width//2 > WIDTH:
-        #     self.x = WIDTH - self.width//2
-        # self.draw(frame)
+        # Ensure the paddle stays within the frame boundaries
+        if self.y - self.height//2 <= 0:
+            self.y = self.height//2
+        if self.y + self.height//2 >= HEIGHT:
+            self.y = HEIGHT - self.height//2
+        
+        self.draw(frame)
 
     # def reset(self):
     #     self.x = self. original_x
