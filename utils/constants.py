@@ -1,9 +1,13 @@
-# Initialize slider variables
+# Window size
 WIDTH, HEIGHT = 700, 500
-ball_radius = 15
-# Decrease the height for a horizontal slider
+
+# Ball Variables
+BALL_RADIUS = 15
+BALL_COLOR = (255,255,255)
+BALL_VEL = 5
+
+# PADDLE VARIABLES
 PADDLE_WIDTH, PADDLE_HEIGHT = 20, 100
-WHITE = (255, 255, 255)
-slider_color = (255, 255, 255)
+
 # speed increment factor
-speed_increment = 1.3
+SPEED_INCREMENT = 1.25
