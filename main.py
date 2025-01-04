@@ -1,5 +1,4 @@
 import cv2
-import time
 from utils.hand_detection import HandDetection
 from utils.Ball import Ball
 from utils.Paddle import Paddle
