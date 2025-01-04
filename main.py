@@ -1,5 +1,4 @@
 import cv2
-import time
 from utils.hand_detection import HandDetection
 from utils.Ball import Ball
 from utils.Paddle import Paddle
@@ -39,12 +38,16 @@ def main():
 
         # Assign centroids to paddles
         if len(centroids) == 1:
-            left_paddle.move(left_paddle.x, centroids[0][1], frame)
+            left_paddle.move(left_paddle.x, centroids[0][1])
         elif len(centroids) == 2:
             # Sort by x-coordinate
             centroids = sorted(centroids, key=lambda c: c[0])
-            left_paddle.move(left_paddle.x, centroids[0][1], frame)
-            right_paddle.move(right_paddle.x, centroids[1][1], frame)
+            left_paddle.move(left_paddle.x, centroids[0][1])
+            right_paddle.move(right_paddle.x, centroids[1][1])
+        
+        # Draw paddles
+        left_paddle.draw(frame)
+        right_paddle.draw(frame)
 
         # Start move ball
         ball.move(frame)

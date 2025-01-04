@@ -18,7 +18,7 @@ class Paddle:
             -1,
         )
 
-    def move(self, x, y,frame):
+    def move(self, x, y):
         self.x = x
         self.y = y
 
@@ -28,7 +28,6 @@ class Paddle:
         if self.y + self.height//2 >= HEIGHT:
             self.y = HEIGHT - self.height//2
         
-        self.draw(frame)
 
     # def reset(self):
     #     self.x = self. original_x
