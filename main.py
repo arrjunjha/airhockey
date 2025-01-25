@@ -35,7 +35,7 @@ def main():
 
         # Get Centroids of hands/color
         centroids = hand_detection.get_centroid(frame)
-
+        print(centroids)
         # Assign centroids to paddles
         if len(centroids) == 1:
             left_paddle.move(left_paddle.x, centroids[0][1])

@@ -71,6 +71,7 @@ class HandDetection():
         clean_mask = self.clean_image(mask)
         thresh_img = self.threshold(clean_mask)
         contours = self.find_contours(thresh_img)
+        print(contours)
         largest_contours = self.two_largest_contours(contours)
         centroids = []
         for contour in largest_contours:
