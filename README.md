@@ -21,14 +21,6 @@ cd AirHockey
 pip install -r requirements.txt
 ```
 
-## Contributing
-Contributions are welcome! If you find any bugs or want to add new features, please follow these steps:
 
-* Fork the repository.
-* Create a new branch: `git checkout -b feature/new-feature`.
-* Make your changes and commit them: `git commit -am 'Add a new feature`.
-* Push the branch to your forked repository: `git push origin feature/new-feature`.
-* Submit a pull request detailing your changes.
 
-## License
-This project is licensed under the MIT License.
+
